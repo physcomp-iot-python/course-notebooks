@@ -12,15 +12,18 @@ class CommandContext:
         self._output.write(endl)
 
 class CommandParser:
-    def __init__(self, output = sys.stdout):
+    def __init__(self, output = sys.stdout, echo = False):
         self.commands = {}
         self._buffer = []
-        self._print_func = print
+        self._output = output
+        self.echo = echo
         
     def attach(self, name, cmd_func):
         self.commands[name] = cmd_func
         
     def feed(self, data):
+        if self.echo:
+            self._output.write(data)
         endl_index = data.find('\n')
         if endl_index >= 0:                   #we detected a line ending
             #print("# found line ending")
@@ -30,19 +33,22 @@ class CommandParser:
             #now parse the line by whitespace
             args = line.strip().split()
             #print("# args=%r"%args)
-            #first arg is the command name, rest get passed in
-            name = args[0]
-            try:
-                cmd = self.commands[name]
-                #make a new context to pass into function
-                context = CommandContext(name = name,
-                                         argv = args[1:],
-                                         print_func = self._print_func,
-                                        )
-                #print("# calling func: %r " % cmd)
-                cmd(context)
-            except KeyError:
-                print("#ERROR: Invalid command: %s" % name)
+            #ignore empty args
+            if args:
+                #first arg is the command name, rest get passed in
+                name = args[0]
+                try:
+                    cmd = self.commands[name]
+                    #make a new context to pass into function
+                    context = CommandContext(name = name,
+                                             argv = args[1:],
+                                             output = self._output,
+                                            )
+                    #print("# calling func: %r " % cmd)
+                    cmd(context)
+                except KeyError:
+                    print("#ERROR: Invalid command: %s" % name)
         else:
             self._buffer.append(data)               #save the data so far
-        #print("# %d bytes received: %r" % (num_rx,self._buffer))
+        #print("# %d bytes received: %r" % (len(data),self._buffer))
+

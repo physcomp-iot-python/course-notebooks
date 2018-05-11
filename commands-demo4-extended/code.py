@@ -6,6 +6,7 @@ import time
 import sys
 import physcomp
 import digitalio
+import touchio
 import board
 
 #local
@@ -27,7 +28,7 @@ touch_inputs = {}
 def command_TOUCH(context):
     global blink_delay
     if context.nargs == 0:
-        raise TypeError("%s takes 1 argument (%d given)" % (context.name,context.nargs))
+        context.print("#ERROR command %s takes 1 argument (%d given)" % (context.name,context.nargs))
     elif context.nargs == 1:
         num = int(context.argv[0])
         #look in local sensor cache
@@ -39,7 +40,7 @@ def command_TOUCH(context):
         val = touch.raw_value
         context.print("%d" % val) #send value back
     else:
-        raise TypeError("%s takes 1 argument (%d given)" % (context.name,context.nargs))
+        context.print("#ERROR command %s takes 1 argument (%d given)" % (context.name,context.nargs))
 
 def command_BLINK(context):
     global blink_delay
@@ -48,10 +49,10 @@ def command_BLINK(context):
     elif context.nargs == 1:
         blink_delay = float(context.argv[0])
     else:
-        raise TypeError("%s takes up to 1 argument (%d given)" % (context.name,context.nargs))
+        context.print("#ERROR command %s takes up to 1 argument (%d given)" % (context.name,context.nargs))
     context.print("# set blink_delay=%f" % blink_delay)
     
-CP = CommandParser()
+CP = CommandParser(echo=True)
 CP.attach("TOUCH", command_TOUCH)
 CP.attach("BLINK", command_BLINK)
 
@@ -71,3 +72,4 @@ while True:
         led.value = not led.value
         time0 = time1
     time.sleep(0.01)
+
