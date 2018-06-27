@@ -3,6 +3,7 @@ import board
 import digitalio
 import machine
 import time
+from analogio import AnalogIn
 
 ESSID = 'nasa'
 PASSWORD = 'mars-adventure'
@@ -12,9 +13,6 @@ PARAMETER_PATH = 'params.txt'
 
 headers={'Content-Type': 'application/json','X-AIO-Key':FEED_KEY}
 url='https://io.adafruit.com/api/v2/donblair/feeds/'+FEED_NAME+'/data.json'
-
-import board
-from analogio import AnalogIn
 
 def get_params():
     f=open(PARAMETER_PATH)
@@ -41,7 +39,7 @@ def post(value):
     
 def post_json(json):
     r=urequests.post(url,json=json,headers=headers) 
-    blink(0.1)    
+    blink(1)    
     return r
 
 def do_connect(ESSID,PASSWORD):
@@ -58,4 +56,3 @@ def do_connect(ESSID,PASSWORD):
 #json=dict(foo='0.2')
 #do_connect(ESSID,PASSWORD)
 #post(json)
-
