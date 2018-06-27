@@ -2,6 +2,7 @@
 import esp
 esp.osdebug(None)
 import gc
+gc.collect()
 
 import network
 ap = network.WLAN(network.AP_IF) # create access-point interface
@@ -11,4 +12,3 @@ ap.config(essid='physcomp-A')
 
 import webrepl
 webrepl.start()
-gc.collect()
