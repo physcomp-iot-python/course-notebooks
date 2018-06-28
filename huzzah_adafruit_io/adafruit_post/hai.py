@@ -7,12 +7,13 @@ from analogio import AnalogIn
 
 ESSID = 'nasa'
 PASSWORD = 'mars-adventure'
-FEED_NAME = 'analog-feed-test-number-1'
-FEED_KEY = '3515b3ecee734780927d7f4ab1654917'
+USER_NAME = "donblair" #PLEASE CHANGE TO YOUR AIO USERNAME
+FEED_NAME = 'analog-feed-test-number-1' #PLEASE CHANGE TO YOUR AIO FEED NAME
+FEED_KEY = '3515b3ecee734780927d7f4ab1654917'  #PLEASE CHANGE TO YOUR AIO KEY
 PARAMETER_PATH = 'params.txt'
 
 headers={'Content-Type': 'application/json','X-AIO-Key':FEED_KEY}
-url='https://io.adafruit.com/api/v2/donblair/feeds/'+FEED_NAME+'/data.json'
+url='https://io.adafruit.com/api/v2/{username}/feeds/{feedname}/data.json'.format(username=USER_NAME,feedname=FEED_NAME)
 
 def get_params():
     f=open(PARAMETER_PATH)
