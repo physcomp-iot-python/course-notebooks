@@ -67,15 +67,16 @@ do_connect() #connect to network
 while True:
     gc.collect()
     try:
-        time.sleep(2.0)
+        time.sleep(0.1)
         #humid, temp = get_ht()
         #print("humid: %0.3f" % humid)
         #print("temp: %0.3f" % temp)
         range_mm = dist_sensor.range
         print(range_mm)
-        #plug into you feeds
-        lidar_feed.post(range_mm)
-        blink(0.5)
+        if range_mm <= 1000:
+            #plug into you feeds
+            lidar_feed.post(range_mm)
+            blink(0.5)
     except KeyboardInterrupt:
         # this is needed for ampy and other REPL interactions to work with this
         # generic error handler
